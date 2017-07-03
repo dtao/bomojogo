@@ -38,10 +38,11 @@ def get_movie_id(search_term):
 
 
 def get_box_office(movie_id):
-    url = ('http://www.boxofficemojo.com/movies/'
-           '?id=%(movie_id)s&page=daily&view=chart') % {'movie_id': movie_id}
-
-    response = requests.get(url)
+    response = requests.get('http://www.boxofficemojo.com/movies/', params={
+        'id': movie_id,
+        'page': 'daily',
+        'view': 'chart'
+    })
     response.raise_for_status()
 
     document = bs4.BeautifulSoup(response.content, 'html.parser')
