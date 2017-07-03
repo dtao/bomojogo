@@ -74,7 +74,10 @@ def get_box_office(movie_id):
 
 
 def parse_int(value):
-    return int(re.sub(r'[$,]', '', value))
+    try:
+        return int(re.sub(r'[$,]', '', value))
+    except ValueError:
+        return None
 
 
 if __name__ == '__main__':
