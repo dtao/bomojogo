@@ -48,13 +48,19 @@ def get_box_office(movie_id):
     document = bs4.BeautifulSoup(response.content, 'html.parser')
     chart = document.find(id='chart_container')
 
+    result = {
+        'title': re.search(r'(.*) - Daily Box Office Results',
+                           document.title.text).group(1),
+        'box_office': []
+    }
+
     if chart is None:
-        return []
+        return result
 
     table = chart.next_sibling
     rows = table.find_all('tr')
 
-    results = []
+    box_office = result['box_office']
     gross_pattern = re.compile(r'\$\d[\d,]+')
 
     for row in rows:
@@ -67,7 +73,7 @@ def get_box_office(movie_id):
         if not gross_pattern.match(gross):
             continue
 
-        results.append({
+        box_office.append({
             'day': day,
             'date': date,
             'rank': parse_int(rank),
@@ -75,7 +81,7 @@ def get_box_office(movie_id):
             'theaters': parse_int(theaters)
         })
 
-    return results
+    return result
 
 
 def parse_int(value):
