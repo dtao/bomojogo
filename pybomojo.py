@@ -51,6 +51,7 @@ def get_box_office(movie_id):
     result = {
         'title': re.search(r'(.*) - Daily Box Office Results',
                            document.title.text).group(1),
+        'href': response.url,
         'box_office': []
     }
 
