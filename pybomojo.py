@@ -34,12 +34,16 @@ def get_box_office(movie_id):
         results.append({
             'day': day,
             'date': date,
-            'rank': rank,
-            'gross': gross,
-            'theaters': theaters
+            'rank': parse_int(rank),
+            'gross': parse_int(gross),
+            'theaters': parse_int(theaters)
         })
 
     return results
+
+
+def parse_int(value):
+    return int(re.sub(r'[$,]', '', value))
 
 
 if __name__ == '__main__':
