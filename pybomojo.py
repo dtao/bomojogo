@@ -46,6 +46,10 @@ def get_box_office(movie_id):
 
     document = bs4.BeautifulSoup(response.content, 'html.parser')
     chart = document.find(id='chart_container')
+
+    if chart is None:
+        return []
+
     table = chart.next_sibling
     rows = table.find_all('tr')
 
