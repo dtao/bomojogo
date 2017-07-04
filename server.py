@@ -1,6 +1,6 @@
 import os
 
-from bottle import request, route, run
+from bottle import request, route, run, view
 
 from pybomojo import get_box_office, get_movie_id
 
@@ -10,8 +10,14 @@ PORT = int(os.getenv('PORT', 8080))
 
 
 @route('/')
+@view('index')
 def index():
-    search_term = request.query.q
+    return {}
+
+
+@route('/search')
+def search():
+    search_term = request.query.title
 
     movie_id = get_movie_id(search_term)
     if movie_id is None:
