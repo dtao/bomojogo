@@ -20,21 +20,32 @@ def get_movie_id(search_term):
         first_cell = row.select_one('td:nth-of-type(1)')
         if first_cell is None:
             return None
+
         movie_link = first_cell.find('a')
         if movie_link is None:
             return None
-        movie_link_match = movie_link_pattern.search(movie_link['href'])
-        if movie_link_match:
-            return movie_link_match.group(1)
 
+        movie_link_match = movie_link_pattern.search(movie_link['href'])
+        if movie_link_match is None:
+            return None
+
+        return movie_link_match.group(1)
+
+    # If there's a highlighted row, that's an exact match.
     matching_row = document.select_one('tr[bgcolor="#FFFF99"]')
     if matching_row is not None:
         return movie_id_from_row(matching_row)
 
-    for row in document.find_all('tr'):
-        movie_id = movie_id_from_row(row)
-        if movie_id:
-            return movie_id
+    # Otherwise, if there's exactly one match, return that.
+    movie_ids = [movie_id_from_row(row)
+                 for row in document.find_all('tr')]
+    movie_ids = [movie_id for movie_id in movie_ids
+                 if movie_id is not None]
+    if len(movie_ids) == 1:
+        return movie_ids[0]
+
+    # In any other case, return None since there isn't an unambiguous result.
+    return None
 
 
 def get_box_office(movie_id):
