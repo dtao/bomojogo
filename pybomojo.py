@@ -27,7 +27,7 @@ def get_movie_id(search_term):
         if movie_link_match:
             return movie_link_match.group(1)
 
-    matching_row = document.select_one('tr[bg-color="#FFFF99"]')
+    matching_row = document.select_one('tr[bgcolor="#FFFF99"]')
     if matching_row is not None:
         return movie_id_from_row(matching_row)
 
