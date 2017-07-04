@@ -1,0 +1,4 @@
+form[action="/search"] label,
+form[action="/search"] textarea {
+  display: block;
+}

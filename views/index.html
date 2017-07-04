@@ -2,14 +2,15 @@
 
 <head>
     <title>PyBoMojo</title>
+    <link rel="stylesheet" href="/static/index.css" />
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="/static/index.js"></script>
 </head>
 
 <body>
     <form action="/search" method="GET">
-        <input type="text" name="title" />
         <label for="title">Movie Title</label>
+        <textarea name="title"></textarea>
         <button id="search-button">Search</button>
     </form>
 

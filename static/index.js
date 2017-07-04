@@ -4,39 +4,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('results').innerHTML = '';
 
-        searchMovie(document.querySelector('input[name="title"]').value);
+        var movieTitles = document.querySelector('textarea[name="title"]').value;
+
+        // remove empty/blank lines
+        movieTitles = movieTitles.split('\n').filter(function(title) {
+            return !!title.replace(/\s+/g, '');
+        });
+
+        var results = [];
+        movieTitles.forEach(function(title) {
+            searchMovie(title, function(result) {
+                results.push(result);
+                if (results.length == movieTitles.length) {
+                    chartMovies(results);
+                }
+            });
+        });
     });
 
-    function searchMovie(title) {
+    function searchMovie(title, callback) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/search?title=' + encodeURIComponent(movieTitle);
+        xhr.open('GET', '/search?title=' + encodeURIComponent(title));
         xhr.addEventListener('load', function() {
-            chartMovie(JSON.parse(xhr.responseText));
+            callback(JSON.parse(xhr.responseText));
         });
         xhr.send();
     }
 
-    function chartMovie(data) {
+    function chartMovies(results) {
         Highcharts.chart('results', {
             chart: {
                 zoomType: 'x'
             },
             title: {
-                text: data.title + ' Box Office'
+                text: 'Daily Box Office'
             },
             xAxis: {
-                type: 'datetime'
+                type: 'linear'
             },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                type: 'line',
-                name: 'Daily Gross',
-                data: data.box_office.map(function(daily) {
-                    return [Date.parse(daily.date), daily.gross];
-                })
-            }],
+            series: results.map(function(result) {
+                return {
+                    type: 'line',
+                    name: result.title,
+                    data: result.box_office.map(function(daily) {
+                        return [daily.day, daily.gross];
+                    })
+                };
+            }),
             credits: {
                 enabled: false
             }
