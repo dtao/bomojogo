@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('search-button').addEventListener('click', function(e) {
         e.preventDefault();
 
-        document.getElementById('results').innerHTML = '';
+        document.getElementById('daily-results').innerHTML = '';
+        document.getElementById('cumulative-results').innerHTML = '';
 
         var movieTitles = document.querySelector('textarea[name="title"]').value;
 
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function chartMovies(results) {
-        Highcharts.chart('results', {
+        Highcharts.chart('daily-results', {
             chart: {
                 zoomType: 'x'
             },
@@ -48,6 +49,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     name: result.title,
                     data: result.box_office.map(function(daily) {
                         return [daily.day, daily.gross];
+                    })
+                };
+            }),
+            credits: {
+                enabled: false
+            }
+        });
+
+        Highcharts.chart('cumulative-results', {
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: 'Cumulative Box Office'
+            },
+            xAxis: {
+                type: 'linear'
+            },
+            series: results.map(function(result) {
+                return {
+                    type: 'line',
+                    name: result.title,
+                    data: result.box_office.map(function(daily) {
+                        return [daily.day, daily.cumulative];
                     })
                 };
             }),

@@ -80,8 +80,8 @@ def get_box_office(movie_id):
         if len(cells) < 10:
             continue
 
-        day, date, rank, gross, _, _, theaters = [cell.text
-                                                  for cell in cells[:7]]
+        day, date, rank, gross, _, _, theaters, _, cumulative = [
+            cell.text for cell in cells[:9]]
         if not gross_pattern.match(gross):
             continue
 
@@ -90,7 +90,8 @@ def get_box_office(movie_id):
             'date': date,
             'rank': parse_int(rank),
             'gross': parse_int(gross),
-            'theaters': parse_int(theaters)
+            'theaters': parse_int(theaters),
+            'cumulative': parse_int(cumulative)
         })
 
     return result
