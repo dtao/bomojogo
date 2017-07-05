@@ -41,7 +41,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Daily Box Office'
             },
             xAxis: {
+                title: {
+                    'text': 'Days in release'
+                },
                 type: 'linear'
+            },
+            yAxis: {
+                title: {
+                    text: 'Daily box office'
+                }
             },
             series: results.map(function(result) {
                 return {
@@ -65,7 +73,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Cumulative Box Office'
             },
             xAxis: {
+                title: {
+                    'text': 'Days in release'
+                },
                 type: 'linear'
+            },
+            yAxis: {
+                title: {
+                    text: 'Cumulative box office'
+                }
             },
             series: results.map(function(result) {
                 return {
