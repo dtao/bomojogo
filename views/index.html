@@ -2,20 +2,34 @@
 
 <head>
     <title>PyBoMojo</title>
-    <link rel="stylesheet" href="/static/index.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="/static/index.js"></script>
 </head>
 
-<body>
-    <form action="/search" method="GET">
-        <label for="title">Movie Title</label>
-        <textarea name="title"></textarea>
-        <button id="search-button">Search</button>
-    </form>
+<body class="container-fluid">
+    <main class="row">
+        <section class="col-lg-2 col-md-4">
+            <h1>pybomojo</h1>
 
-    <div id="daily-results"></div>
-    <div id="cumulative-results"></div>
+            <p class="lead">box office graphs based on <a href="http://www.boxofficemojo.com" target="_blank">Box Office Mojo</a></p>
+
+            <form action="/search" method="GET">
+                <fieldset class="form-group">
+                    <label for="title">Movie Title(s)</label>
+                    <textarea class="form-control" name="title"></textarea>
+                    <span class="help-block">Enter one or more movie titles (one per line)</span>
+                </fieldset>
+
+                <button class="btn btn-primary" id="search-button">Search</button>
+            </form>
+        </section>
+
+        <section class="col-lg-10 col-md-8">
+            <div id="daily-results"></div>
+            <div id="cumulative-results"></div>
+        </section>
+    </main>
 </body>
 
 </html>
