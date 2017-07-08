@@ -148,9 +148,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return null;
         }
 
-        var parsed = period.match(/^(\d+)([dw])$/),
-            value = Number(parsed[1]),
-            unit = parsed[2];
+        try {
+            var parsed = period.match(/^(\d+)([dw])$/),
+                value = Number(parsed[1]),
+                unit = parsed[2];
+        } catch (e) {
+            return null;
+        }
 
         switch (unit) {
             case 'w':
