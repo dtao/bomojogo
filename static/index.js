@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('search-button').addEventListener('click', function(e) {
         e.preventDefault();
 
+        document.getElementById('errors').innerHTML = '';
         document.getElementById('daily-results').innerHTML = '';
         document.getElementById('cumulative-results').innerHTML = '';
 
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             searchMovie(title, function(result) {
                 results.push(result);
                 if (results.length == movieTitles.length) {
+                    extractErrors(results);
                     chartMovies(results, maxResults);
                     document.body.classList.remove('loading');
                 }
@@ -33,9 +35,40 @@ document.addEventListener('DOMContentLoaded', function() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '/search?title=' + encodeURIComponent(title));
         xhr.addEventListener('load', function() {
-            callback(JSON.parse(xhr.responseText));
+            var data;
+            try {
+                data = JSON.parse(xhr.responseText);
+            } catch (e) {
+                data = {
+                    'error': 'No luck finding "' + title + '" :('
+                };
+            }
+            callback(data);
         });
         xhr.send();
+    }
+
+    function extractErrors(results) {
+        var errors = [];
+
+        for (var i = results.length - 1; i >= 0; --i) {
+            if (results[i].error) {
+                errors.push(results[i].error);
+                results.splice(i, 1);
+            }
+        }
+
+        if (errors.length == 0) {
+            return;
+        }
+
+        var errorList = document.createElement('ul');
+        document.getElementById('errors').appendChild(errorList);
+        errors.forEach(function(error) {
+            var errorListItem = document.createElement('li');
+            errorListItem.textContent = error;
+            errorList.appendChild(errorListItem);
+        });
     }
 
     function chartMovies(results, maxResults) {

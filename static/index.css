@@ -8,3 +8,21 @@ body.loading:after {
   background: no-repeat center url("/static/loading.gif") #fff;
   opacity: 0.75;
 }
+
+#errors:empty {
+  display: none;
+}
+
+#errors {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 600px;
+  margin-left: -300px;
+  z-index: 1;
+}
+
+#errors ul {
+  list-style: none;
+  padding-left: 0;
+}
