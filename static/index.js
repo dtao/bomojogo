@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('search-button').addEventListener('click', function(e) {
         e.preventDefault();
 
-        document.getElementById('errors').innerHTML = '';
+        document.getElementById('errors').classList.add('hidden');
         document.getElementById('daily-results').innerHTML = '';
         document.getElementById('cumulative-results').innerHTML = '';
 
@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+    });
+
+    document.querySelector('#errors button.close').addEventListener('click', function() {
+        document.getElementById('errors').classList.add('hidden');
     });
 
     function searchMovie(title, callback) {
@@ -58,12 +62,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        if (errors.length == 0) {
-            return;
+        var errorsContainer = document.getElementById('errors'),
+            errorList = errorsContainer.querySelector('ul');
+
+        if (errors.length > 0) {
+            errorsContainer.classList.remove('hidden');
         }
 
-        var errorList = document.createElement('ul');
-        document.getElementById('errors').appendChild(errorList);
         errors.forEach(function(error) {
             var errorListItem = document.createElement('li');
             errorListItem.textContent = error;

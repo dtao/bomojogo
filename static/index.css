@@ -9,10 +9,6 @@ body.loading:after {
   opacity: 0.75;
 }
 
-#errors:empty {
-  display: none;
-}
-
 #errors {
   position: absolute;
   top: 20px;
