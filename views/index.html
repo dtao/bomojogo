@@ -19,6 +19,14 @@
                     <label for="title">Movie Title(s)</label>
                     <textarea class="form-control" name="title"></textarea>
                     <span class="help-block">Enter one or more movie titles (one per line)</span>
+
+                    <label for="period">Time Period</label>
+                    <select class="form-control" name="period">
+                        <option value="7d">1 week</option>
+                        <option value="30d">30 days</option>
+                        <option value="90d">90 days</option>
+                        <option value="">Forever</option>
+                    </select>
                 </fieldset>
 
                 <button class="btn btn-primary" id="search-button">Search</button>

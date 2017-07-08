@@ -12,12 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
             return !!title.replace(/\s+/g, '');
         });
 
+        var period = document.querySelector('select[name="period"]').value,
+            maxResults = getMaxResults(period);
+
         var results = [];
         movieTitles.forEach(function(title) {
             searchMovie(title, function(result) {
                 results.push(result);
                 if (results.length == movieTitles.length) {
-                    chartMovies(results);
+                    chartMovies(results, maxResults);
                 }
             });
         });
@@ -32,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.send();
     }
 
-    function chartMovies(results) {
+    function chartMovies(results, maxResults) {
         Highcharts.chart('daily-results', {
             chart: {
                 zoomType: 'x'
@@ -51,11 +54,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: 'Daily box office'
                 }
             },
+            plotOptions: {
+                series: {
+                    pointStart: 1
+                }
+            },
             series: results.map(function(result) {
+                var boxOffice = result.box_office;
+
+                if (maxResults) {
+                    boxOffice = boxOffice.slice(0, maxResults);
+                }
+
                 return {
                     type: 'line',
                     name: result.title,
-                    data: result.box_office.map(function(daily) {
+                    data: boxOffice.map(function(daily) {
                         return [daily.day, daily.gross];
                     })
                 };
@@ -83,11 +97,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     text: 'Cumulative box office'
                 }
             },
+            plotOptions: {
+                series: {
+                    pointStart: 1
+                }
+            },
             series: results.map(function(result) {
+                var boxOffice = result.box_office;
+
+                if (maxResults) {
+                    boxOffice = boxOffice.slice(0, maxResults);
+                }
+
                 return {
                     type: 'line',
                     name: result.title,
-                    data: result.box_office.map(function(daily) {
+                    data: boxOffice.map(function(daily) {
                         return [daily.day, daily.cumulative];
                     })
                 };
@@ -96,5 +121,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 enabled: false
             }
         });
+    }
+
+    function getMaxResults(period) {
+        if (!period) {
+            return null;
+        }
+
+        var parsed = period.match(/^(\d+)([dw])$/),
+            value = Number(parsed[1]),
+            unit = parsed[2];
+
+        switch (unit) {
+            case 'w':
+                return value * 7;
+            case 'd':
+            default:
+                return value;
+        }
     }
 });
