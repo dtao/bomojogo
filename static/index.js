@@ -2,10 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('search-button').addEventListener('click', function(e) {
         e.preventDefault();
 
-        document.getElementById('errors').classList.add('hidden');
-        document.getElementById('daily-results').innerHTML = '';
-        document.getElementById('cumulative-results').innerHTML = '';
-
         var movieTitles = document.querySelector('textarea[name="title"]').value;
 
         // remove empty/blank lines
@@ -13,8 +9,19 @@ document.addEventListener('DOMContentLoaded', function() {
             return !!title.replace(/\s+/g, '');
         });
 
-        var period = document.querySelector('select[name="period"]').value,
-            maxResults = getMaxResults(period);
+        var period = document.querySelector('select[name="period"]').value;
+
+        searchMovies(movieTitles, period);
+    });
+
+    document.querySelector('#errors button.close').addEventListener('click', function() {
+        document.getElementById('errors').classList.add('hidden');
+    });
+
+    function searchMovies(movieTitles, period) {
+        document.getElementById('errors').classList.add('hidden');
+        document.getElementById('daily-results').innerHTML = '';
+        document.getElementById('cumulative-results').innerHTML = '';
 
         document.body.classList.add('loading');
 
@@ -24,16 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 results.push(result);
                 if (results.length == movieTitles.length) {
                     extractErrors(results);
-                    chartMovies(results, maxResults);
+                    chartMovies(results, getMaxResults(period));
                     document.body.classList.remove('loading');
                 }
             });
         });
-    });
-
-    document.querySelector('#errors button.close').addEventListener('click', function() {
-        document.getElementById('errors').classList.add('hidden');
-    });
+    }
 
     function searchMovie(title, callback) {
         var xhr = new XMLHttpRequest();
