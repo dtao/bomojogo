@@ -1,4 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
+    var query = parseQuery();
+
+    if (query.movies) {
+        populateForm(query.movies, query.period);
+        searchMovies(query.movies, query.period);
+    }
+
+    window.addEventListener('popstate', function(e) {
+        if (!e.state.movies) {
+            return;
+        }
+
+        populateForm(e.state.movies, e.state.period);
+        chartMovies(e.state.results, getMaxResults(e.state.period));
+    });
+
     document.getElementById('search-button').addEventListener('click', function(e) {
         e.preventDefault();
 
@@ -32,6 +48,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (results.length == movieTitles.length) {
                     extractErrors(results);
                     chartMovies(results, getMaxResults(period));
+                    history.pushState({
+                        'movies': movieTitles,
+                        'period': period,
+                        'results': results
+                    }, '', createQuery(movieTitles, period));
                     document.body.classList.remove('loading');
                 }
             });
@@ -85,6 +106,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
         Highcharts.chart('cumulative-results', getChartOptions(
             'Cumulative box office', results, 'cumulative', maxResults));
+    }
+
+    function populateForm(movieTitles, period) {
+        document.querySelector('textarea[name="title"]').value = movieTitles.join('\n');
+        if (period) {
+            document.querySelector('select[name="period"]').value = period;
+        }
+    }
+
+    function parseQuery() {
+        var query = {};
+
+        location.search.slice(1).split('&').forEach(function(param) {
+            var pair = param.split('=');
+            switch (pair[0]) {
+                case 'movies':
+                    query.movies = pair[1].split(',').map(decodeURIComponent);
+                    break;
+                case 'period':
+                    query.period = pair[1];
+                    break;
+            }
+        });
+
+        return query;
+    }
+
+    function createQuery(movieTitles, period) {
+        var query = '?movies=' + movieTitles.map(encodeURIComponent).join(',');
+
+        if (period) {
+            query += '&period=' + period;
+        }
+
+        return query;
     }
 
     function getMaxResults(period) {
