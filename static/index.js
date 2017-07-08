@@ -15,12 +15,15 @@ document.addEventListener('DOMContentLoaded', function() {
         var period = document.querySelector('select[name="period"]').value,
             maxResults = getMaxResults(period);
 
+        document.body.classList.add('loading');
+
         var results = [];
         movieTitles.forEach(function(title) {
             searchMovie(title, function(result) {
                 results.push(result);
                 if (results.length == movieTitles.length) {
                     chartMovies(results, maxResults);
+                    document.body.classList.remove('loading');
                 }
             });
         });

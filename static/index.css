@@ -1,0 +1,10 @@
+body.loading:after {
+  display: block;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: no-repeat center url("/static/loading.gif") #fff;
+  opacity: 0.75;
+}
