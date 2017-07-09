@@ -3,23 +3,30 @@
 <head>
     <title>PyBoMojo</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-    <link rel="stylesheet" href="/static/index.css" />
     <script src="http://code.highcharts.com/highcharts.js"></script>
+    
+    <!-- all this, just for typeahead :( -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+
+    <link rel="stylesheet" href="/static/index.css" />
     <script src="/static/index.js"></script>
 </head>
 
 <body class="container-fluid">
     <main class="row">
-        <section class="col-lg-2 col-md-4">
+        <section class="col-lg-3 col-md-4">
             <h1>pybomojo</h1>
 
             <p class="lead">box office graphs based on <a href="http://www.boxofficemojo.com" target="_blank">Box Office Mojo</a></p>
 
-            <form action="/search" method="GET">
+            <form action="/boxoffice" method="GET">
                 <fieldset class="form-group">
                     <label for="title">Movie Title(s)</label>
-                    <textarea class="form-control" name="title"></textarea>
-                    <span class="help-block">Enter one or more movie titles (one per line)</span>
+                    <textarea class="form-control" name="movies" rows="5"></textarea>
+                    <span class="help-block">Start typing to search for a movie</span>
 
                     <label for="period">Time Period</label>
                     <select class="form-control" name="period">
@@ -30,11 +37,11 @@
                     </select>
                 </fieldset>
 
-                <button class="btn btn-primary" id="search-button">Search</button>
+                <button class="btn btn-primary" id="submit-button">Submit</button>
             </form>
         </section>
 
-        <section class="col-lg-10 col-md-8">
+        <section class="col-lg-9 col-md-8">
             <div id="errors" class="alert alert-danger hidden">
                 <button type="button" class="close"><span>&times;</span></button>
                 <ul><!-- errors go here --></ul>

@@ -2,8 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var query = parseQuery();
 
     if (query.movies) {
-        populateForm(query.movies, query.period);
-        searchMovies(query.movies, query.period);
+        loadMovies(query.movies.map(function(movieId) {
+            return {
+                movie_id: movieId,
+                title: movieId
+            };
+        }), query.period, true);
     }
 
     window.addEventListener('popstate', function(e) {
@@ -15,26 +19,41 @@ document.addEventListener('DOMContentLoaded', function() {
         chartMovies(e.state.results, getMaxResults(e.state.period));
     });
 
-    document.getElementById('search-button').addEventListener('click', function(e) {
+    var moviesSearch = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+            url: '/search?title=%TITLE',
+            wildcard: '%TITLE',
+            transform: function(response) {
+                return response.results;
+            }
+        }
+    });
+
+    $('textarea[name="movies"]').tagsinput({
+        itemValue: 'movie_id',
+        itemText: 'title',
+        typeaheadjs: {
+            displayKey: 'title',
+            source: moviesSearch,
+            limit: 10
+        }
+    });
+
+    document.getElementById('submit-button').addEventListener('click', function(e) {
         e.preventDefault();
 
-        var movieTitles = document.querySelector('textarea[name="title"]').value;
-
-        // remove empty/blank lines
-        movieTitles = movieTitles.split('\n').filter(function(title) {
-            return !!title.replace(/\s+/g, '');
-        });
-
+        var movies = $('textarea[name="movies"]').tagsinput('items');
         var period = document.querySelector('select[name="period"]').value;
-
-        searchMovies(movieTitles, period);
+        loadMovies(movies, period);
     });
 
     document.querySelector('#errors button.close').addEventListener('click', function() {
         document.getElementById('errors').classList.add('hidden');
     });
 
-    function searchMovies(movieTitles, period) {
+    function loadMovies(movies, period, refresh) {
         document.getElementById('errors').classList.add('hidden');
         document.getElementById('daily-results').innerHTML = '';
         document.getElementById('cumulative-results').innerHTML = '';
@@ -42,33 +61,42 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('loading');
 
         var results = [];
-        movieTitles.forEach(function(title) {
-            searchMovie(title, function(result) {
+        movies.forEach(function(movie) {
+            searchMovie(movie, function(result) {
+                // If loading page load, blah blah
+                movie.title = result.title;
+
                 results.push(result);
-                if (results.length == movieTitles.length) {
+                if (results.length == movies.length) {
                     extractErrors(results);
                     chartMovies(results, getMaxResults(period));
                     history.pushState({
-                        'movies': movieTitles,
+                        'movies': movies,
                         'period': period,
                         'results': results
-                    }, '', createQuery(movieTitles, period));
+                    }, '', createQuery(movies, period));
+
+                    // If loading on page load, blah blah
+                    if (refresh) {
+                        populateForm(movies, period);
+                    }
+
                     document.body.classList.remove('loading');
                 }
             });
         });
     }
 
-    function searchMovie(title, callback) {
+    function searchMovie(movie, callback) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/boxoffice/search?title=' + encodeURIComponent(title));
+        xhr.open('GET', '/boxoffice?movie_id=' + encodeURIComponent(movie.movie_id));
         xhr.addEventListener('load', function() {
             var data;
             try {
                 data = JSON.parse(xhr.responseText);
             } catch (e) {
                 data = {
-                    'error': 'No luck finding "' + title + '" :('
+                    'error': 'No luck finding "' + movie.title + '" :('
                 };
             }
             callback(data);
@@ -108,8 +136,11 @@ document.addEventListener('DOMContentLoaded', function() {
             'Cumulative box office', results, 'cumulative', maxResults));
     }
 
-    function populateForm(movieTitles, period) {
-        document.querySelector('textarea[name="title"]').value = movieTitles.join('\n');
+    function populateForm(movies, period) {
+        $('textarea[name="movies"]').tagsinput('removeAll');
+        movies.forEach(function(movie) {
+            $('textarea[name="movies"]').tagsinput('add', movie);
+        });
         if (period) {
             document.querySelector('select[name="period"]').value = period;
         }
@@ -133,8 +164,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return query;
     }
 
-    function createQuery(movieTitles, period) {
-        var query = '?movies=' + movieTitles.map(encodeURIComponent).join(',');
+    function createQuery(movies, period) {
+        var movieIds = movies.map(function(movie) {
+            return movie.movie_id;
+        });
+
+        var query = '?movies=' + movieIds.map(encodeURIComponent).join(',');
 
         if (period) {
             query += '&period=' + period;
