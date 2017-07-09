@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function searchMovie(title, callback) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/search?title=' + encodeURIComponent(title));
+        xhr.open('GET', '/boxoffice/search?title=' + encodeURIComponent(title));
         xhr.addEventListener('load', function() {
             var data;
             try {

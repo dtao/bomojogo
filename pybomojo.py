@@ -6,7 +6,7 @@ import bs4
 import requests
 
 
-def get_movie_id(search_term):
+def search_movies(search_term):
     response = requests.get('http://www.boxofficemojo.com/search/', params={
         'q': search_term
     })
@@ -16,33 +16,42 @@ def get_movie_id(search_term):
 
     movie_link_pattern = re.compile(r'/movies/\?id=([\w\.]+)')
 
-    def movie_id_from_row(row):
+    def movie_from_row(row):
         first_cell = row.select_one('td:nth-of-type(1)')
         if first_cell is None:
-            return None
+            return None, None
 
         movie_link = first_cell.find('a')
         if movie_link is None:
-            return None
+            return None, None
 
         movie_link_match = movie_link_pattern.search(movie_link['href'])
         if movie_link_match is None:
-            return None
+            return None, None
 
-        return movie_link_match.group(1)
+        return movie_link_match.group(1), first_cell.text.strip()
 
-    # If there's a highlighted row, that's an exact match.
-    matching_row = document.select_one('tr[bgcolor="#FFFF99"]')
-    if matching_row is not None:
-        return movie_id_from_row(matching_row)
+    for row in document.find_all('tr'):
+        movie_id, title = movie_from_row(row)
+        if movie_id:
+            # If there's a highlighted row, that's an exact match.
+            yield {
+                'movie_id': movie_id,
+                'title': title,
+                'exact': row['bgcolor'] == '#FFFF99'
+            }
+
+
+def get_movie_id(search_term):
+    results = list(search_movies(search_term))
+
+    exact_match = next((result for result in results if result['exact']), None)
+    if exact_match is not None:
+        return exact_match['movie_id']
 
     # Otherwise, if there's exactly one match, return that.
-    movie_ids = [movie_id_from_row(row)
-                 for row in document.find_all('tr')]
-    movie_ids = [movie_id for movie_id in movie_ids
-                 if movie_id is not None]
-    if len(movie_ids) == 1:
-        return movie_ids[0]
+    if len(results) == 1:
+        return results[0]['movie_id']
 
     # In any other case, return None since there isn't an unambiguous result.
     return None

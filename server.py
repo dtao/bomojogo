@@ -2,7 +2,7 @@ import os
 
 from bottle import request, route, run, static_file, view
 
-from pybomojo import get_box_office, get_movie_id
+from pybomojo import get_box_office, get_movie_id, search_movies
 
 # configurable
 DEBUG = int(os.getenv('DEBUG', 0)) == 1
@@ -22,11 +22,21 @@ def index():
 @route('/search')
 def search():
     search_term = request.query.title
+    return {
+        'results': list(search_movies(search_term))
+    }
 
+
+@route('/boxoffice')
+def box_office():
+    movie_id = request.query.movie_id
+    return get_box_office(movie_id)
+
+
+@route('/boxoffice/search')
+def box_office_search():
+    search_term = request.query.title
     movie_id = get_movie_id(search_term)
-    if movie_id is None:
-        return None
-
     return get_box_office(movie_id)
 
 
