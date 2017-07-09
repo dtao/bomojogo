@@ -1,57 +1,69 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var query = parseQuery();
+    // actual stuff that happens on page load
+    loadMoviesFromQuery();
+    initializeUI();
+    initializeState();
 
-    if (query.movies) {
-        loadMovies(query.movies.map(function(movieId) {
-            return {
-                movie_id: movieId,
-                title: movieId
-            };
-        }), query.period, true);
+    // all teh codez
+    function loadMoviesFromQuery() {
+        var query = parseQuery();
+
+        if (query.movies) {
+            loadMovies(query.movies.map(function(movieId) {
+                return {
+                    movie_id: movieId,
+                    title: movieId
+                };
+            }), query.period, true);
+        }
     }
 
-    window.addEventListener('popstate', function(e) {
-        if (!e.state.movies) {
-            return;
-        }
-
-        populateForm(e.state.movies, e.state.period);
-        chartMovies(e.state.results, getMaxResults(e.state.period));
-    });
-
-    var moviesSearch = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        remote: {
-            url: '/search?title=%TITLE',
-            wildcard: '%TITLE',
-            transform: function(response) {
-                return response.results;
+    function initializeUI() {
+        var moviesSearch = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/search?title=%TITLE',
+                wildcard: '%TITLE',
+                transform: function(response) {
+                    return response.results;
+                }
             }
-        }
-    });
+        });
 
-    $('textarea[name="movies"]').tagsinput({
-        itemValue: 'movie_id',
-        itemText: 'title',
-        typeaheadjs: {
-            displayKey: 'title',
-            source: moviesSearch,
-            limit: 10
-        }
-    });
+        $('textarea[name="movies"]').tagsinput({
+            itemValue: 'movie_id',
+            itemText: 'title',
+            typeaheadjs: {
+                displayKey: 'title',
+                source: moviesSearch,
+                limit: 10
+            }
+        });
 
-    document.getElementById('submit-button').addEventListener('click', function(e) {
-        e.preventDefault();
+        document.getElementById('submit-button').addEventListener('click', function(e) {
+            e.preventDefault();
 
-        var movies = $('textarea[name="movies"]').tagsinput('items');
-        var period = document.querySelector('select[name="period"]').value;
-        loadMovies(movies, period);
-    });
+            var movies = $('textarea[name="movies"]').tagsinput('items');
+            var period = document.querySelector('select[name="period"]').value;
+            loadMovies(movies, period);
+        });
 
-    document.querySelector('#errors button.close').addEventListener('click', function() {
-        document.getElementById('errors').classList.add('hidden');
-    });
+        document.querySelector('#errors button.close').addEventListener('click', function() {
+            document.getElementById('errors').classList.add('hidden');
+        });
+    }
+
+    function initializeState() {
+        window.addEventListener('popstate', function(e) {
+            if (!e.state.movies) {
+                return;
+            }
+
+            populateForm(e.state.movies, e.state.period);
+            chartMovies(e.state.results, getMaxResults(e.state.period));
+        });
+    }
 
     function loadMovies(movies, period, refresh) {
         document.getElementById('errors').classList.add('hidden');
