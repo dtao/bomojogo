@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // all teh codez
     function loadMoviesFromQuery() {
+        // No need to load everything back up if the page already has state.
+        if (history.state) {
+            return;
+        }
+
         var query = parseQuery();
 
         if (query.movies) {
@@ -55,14 +60,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function initializeState() {
+        if (history.state) {
+            displayState(history.state);
+        }
+
         window.addEventListener('popstate', function(e) {
             if (!e.state.movies) {
                 return;
             }
 
-            populateForm(e.state.movies, e.state.period);
-            chartMovies(e.state.results, getMaxResults(e.state.period));
+            displayState(e.state);
         });
+    }
+
+    function displayState(state) {
+        populateForm(state.movies, state.period);
+        chartMovies(state.results, getMaxResults(state.period));
     }
 
     function loadMovies(movies, period, refresh) {
