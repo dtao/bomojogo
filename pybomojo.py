@@ -14,7 +14,7 @@ def search_movies(search_term):
 
     document = bs4.BeautifulSoup(response.content, 'html.parser')
 
-    movie_link_pattern = re.compile(r'/movies/\?id=([\w\.]+)')
+    movie_link_pattern = re.compile(r'/movies/\?id=([\w\-\.]+)')
 
     def movie_from_row(row):
         first_cell = row.select_one('td:nth-of-type(1)')
