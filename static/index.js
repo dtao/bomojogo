@@ -327,6 +327,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             },
             plotOptions: {
+                line: {
+                    marker: {
+                        enabled: false
+                    }
+                },
                 series: {
                     pointStart: 1
                 }
