@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 results.push(result);
                 if (results.length == movies.length) {
                     extractErrors(results);
+                    alignResults(results);
                     chartMovies(results, getMaxResults(period));
                     history.pushState({
                         'movies': movies,
@@ -138,6 +139,49 @@ document.addEventListener('DOMContentLoaded', function() {
             errorListItem.textContent = error;
             errorList.appendChild(errorListItem);
         });
+    }
+
+    var DAYS = [
+        'Fri',
+        'Thu',
+        'Wed',
+        'Tue',
+        'Mon',
+        'Sun',
+        'Sat'
+    ];
+
+    function alignResults(results) {
+        var earliestDay = getEarliestDay(results);
+
+        results.forEach(function(result) {
+            padBoxOffice(result, earliestDay);
+        });
+    }
+
+    function getEarliestDay(results) {
+        var earliestDay = 0;
+
+        results.forEach(function(result) {
+            earliestDay = Math.max(earliestDay, DAYS.indexOf(result.box_office[0].day));
+        });
+
+        return earliestDay;
+    }
+
+    function padBoxOffice(result, earliestDay) {
+        var currentDay = DAYS.indexOf(result.box_office[0].day);
+
+        while (currentDay++ < earliestDay) {
+            result.box_office.unshift({
+                day: DAYS[currentDay],
+                date: null,
+                rank: null,
+                gross: null,
+                theaters: null,
+                cumulative: null
+            });
+        }
     }
 
     function chartMovies(results, maxResults) {
@@ -222,9 +266,37 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             xAxis: {
                 title: {
-                    'text': 'Days in release'
+                    'text': 'Weeks in release'
                 },
-                type: 'linear'
+                labels: {
+                    formatter: function() {
+                        var week = Math.floor(this.value / 7) + 1;
+                        return formatFriday(week);
+                    }
+                },
+                tickPositioner: function() {
+                    var positions = [];
+
+                    var largestResult = results.reduce(function(a, b) {
+                        return a.box_office.length > b.box_office.length ? a : b;
+                    }, results[0]);
+
+                    largestResult.box_office.forEach(function(daily, i) {
+                        if (daily.day == 'Fri') {
+                            positions.push(i + 1);
+                        }
+                    });
+
+                    // Don't display *too* many data labels (e.g. when using
+                    // "Forever" as the time period).
+                    if (positions.length > 10) {
+                        positions = positions.filter(function(pos, i) {
+                            return i % 2 == 0;
+                        });
+                    }
+
+                    return positions;
+                }
             },
             yAxis: {
                 title: {
@@ -255,5 +327,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 enabled: false
             }
         };
+    }
+
+    function getDayAtOrdinal(results, ordinal) {
+        for (var i = 0; i < results.length; ++i) {
+            if (ordinal > 0 && ordinal <= results[i].box_office.length) {
+                return results[i].box_office[ordinal - 1].day;
+            }
+        }
+
+        return null;
+    }
+
+    function formatFriday(week) {
+        var suffix;
+        switch (week % 10) {
+            case 1:
+                suffix = 'st';
+                break;
+            case 2:
+                if (week % 100 != 12) {
+                    suffix = 'nd';
+                }
+                break;
+            case 3:
+                if (week % 100 != 13) {
+                    suffix = 'rd';
+                }
+                break;
+        }
+
+        if (!suffix) {
+            suffix = 'th';
+        }
+
+        return week + suffix + ' Friday';
     }
 });
