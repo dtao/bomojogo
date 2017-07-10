@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const TITLE_BASE = 'Box Office Hawk';
+    const DAYS = [ 'Fri', 'Thu', 'Wed', 'Tue', 'Mon', 'Sun', 'Sat'];
+
     // actual stuff that happens on page load
     loadMoviesFromQuery();
     initializeUI();
@@ -76,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayState(state) {
         populateForm(state.movies, state.period);
         chartMovies(state.results, getMaxResults(state.period));
+        updateTitle(state.movies);
     }
 
     function loadMovies(movies, period, refresh) {
@@ -101,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         'period': period,
                         'results': results
                     }, '', createQuery(movies, period));
+                    updateTitle(movies);
 
                     // If loading on page load, blah blah
                     if (refresh) {
@@ -154,16 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    var DAYS = [
-        'Fri',
-        'Thu',
-        'Wed',
-        'Tue',
-        'Mon',
-        'Sun',
-        'Sat'
-    ];
-
     function alignResults(results) {
         var earliestDay = getEarliestDay(results);
 
@@ -213,6 +208,20 @@ document.addEventListener('DOMContentLoaded', function() {
         if (period) {
             document.querySelector('select[name="period"]').value = period;
         }
+    }
+
+    function updateTitle(movies) {
+        var title = TITLE_BASE;
+
+        var movieTitles = movies.map(function(movie) {
+            return movie.title;
+        });
+
+        if (movieTitles.length > 0) {
+            title += ' - ' + movieTitles.join(' / ');
+        }
+
+        document.title = title;
     }
 
     function parseQuery() {
