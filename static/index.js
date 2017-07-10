@@ -2,6 +2,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const TITLE_BASE = 'Box Office Hawk';
     const DAYS = [ 'Fri', 'Thu', 'Wed', 'Tue', 'Mon', 'Sun', 'Sat'];
 
+    var moviesField = document.querySelector('textarea[name="movies"]'),
+        periodField = document.querySelector('select[name="period"]'),
+        submitButton = document.getElementById('submit-button'),
+        closeErrorsButton = document.querySelector('#errors button.close'),
+        errorsContainer = document.getElementById('errors'),
+        errorsList = errorsContainer.querySelector('ul'),
+        dailyResultsContainer = document.getElementById('daily-results'),
+        cumulativeResultsContainer = document.getElementById('cumulative-results');
+
     // actual stuff that happens on page load
     loadMoviesFromQuery();
     initializeUI();
@@ -39,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        $('textarea[name="movies"]').tagsinput({
+        $(moviesField).tagsinput({
             itemValue: 'movie_id',
             itemText: 'title',
             typeaheadjs: {
@@ -49,16 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.getElementById('submit-button').addEventListener('click', function(e) {
+        submitButton.addEventListener('click', function(e) {
             e.preventDefault();
-
-            var movies = $('textarea[name="movies"]').tagsinput('items');
-            var period = document.querySelector('select[name="period"]').value;
-            loadMovies(movies, period);
+            loadMovies($(moviesField).tagsinput('items'), periodField.value);
         });
 
-        document.querySelector('#errors button.close').addEventListener('click', function() {
-            document.getElementById('errors').classList.add('hidden');
+        closeErrorsButton.addEventListener('click', function() {
+            errorsContainer.classList.add('hidden');
         });
     }
 
@@ -83,9 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function loadMovies(movies, period, refresh) {
-        document.getElementById('errors').classList.add('hidden');
-        document.getElementById('daily-results').innerHTML = '';
-        document.getElementById('cumulative-results').innerHTML = '';
+        errorsContainer.classList.add('hidden');
+        dailyResultsContainer.innerHTML = '';
+        cumulativeResultsContainer.innerHTML = '';
 
         document.body.classList.add('loading');
 
@@ -145,9 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        var errorsContainer = document.getElementById('errors'),
-            errorList = errorsContainer.querySelector('ul');
-
         if (errors.length > 0) {
             errorsContainer.classList.remove('hidden');
         }
@@ -155,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
         errors.forEach(function(error) {
             var errorListItem = document.createElement('li');
             errorListItem.textContent = error;
-            errorList.appendChild(errorListItem);
+            errorsList.appendChild(errorListItem);
         });
     }
 
@@ -201,13 +204,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function populateForm(movies, period) {
-        $('textarea[name="movies"]').tagsinput('removeAll');
+        $(moviesField).tagsinput('removeAll');
         movies.forEach(function(movie) {
-            $('textarea[name="movies"]').tagsinput('add', movie);
+            $(moviesField).tagsinput('add', movie);
         });
-        if (period) {
-            document.querySelector('select[name="period"]').value = period;
-        }
+        periodField.value = period || '';
     }
 
     function updateTitle(movies) {
