@@ -1,8 +1,5 @@
-# used for parsing HTML from Box Office Mojo
-beautifulsoup4==4.6.0
-
 # web micro-framework
 bottle==0.12.13
 
-# used for making requests to Box Office Mojo
-requests==2.18.1
+# client for boxofficemojo.com
+pybomojo==0.1
