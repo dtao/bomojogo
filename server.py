@@ -22,9 +22,14 @@ def index():
 @route('/search')
 def search():
     search_term = request.query.title
-    return {
-        'results': list(search_movies(search_term))
-    }
+    results = search_movies(search_term)
+
+    # Move exact result to the top. This is very inefficient, but it'll get the
+    # job done for now. (The more efficient code would be slightly uglier.)
+    results = ([result for result in results if result['exact']] +
+               [result for result in results if not result['exact']])
+
+    return {'results': results}
 
 
 @route('/boxoffice')
