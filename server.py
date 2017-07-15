@@ -9,6 +9,9 @@ DEBUG = int(os.getenv('DEBUG', 0)) == 1
 HOST = os.getenv('HOST', 'localhost')
 PORT = int(os.getenv('PORT', 8080))
 
+# Google analytics
+GA_TRACKING_ID = os.getenv('GA_TRACKING_ID', None)
+
 # not configurable
 APP_ROOT = os.path.dirname(__file__)
 
@@ -16,7 +19,7 @@ APP_ROOT = os.path.dirname(__file__)
 @route('/')
 @view('index')
 def index():
-    return {}
+    return {'GA_TRACKING_ID': GA_TRACKING_ID}
 
 
 @route('/search')
