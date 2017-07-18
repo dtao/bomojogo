@@ -1,1 +1,1 @@
-web: HOST=$HOST PORT=$PORT python server.py
+web: HOST=$HOST PORT=$PORT API_HOST=$API_HOST python server.py

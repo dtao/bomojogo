@@ -1,5 +1,2 @@
 # web micro-framework
 bottle==0.12.13
-
-# client for boxofficemojo.com
-pybomojo==0.1

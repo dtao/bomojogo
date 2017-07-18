@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const API_HOST = document.body.getAttribute('data-api-host');
     const TITLE_BASE = 'Box Office Hawk';
     const DAYS = [ 'Fri', 'Thu', 'Wed', 'Tue', 'Mon', 'Sun', 'Sat'];
 
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                url: '/search?title=%TITLE',
+                url: API_HOST + '/movies/search?title=%TITLE',
                 wildcard: '%TITLE',
                 transform: function(response) {
                     return response.results;
@@ -126,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function searchMovie(movie, callback) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/boxoffice?movie_id=' + encodeURIComponent(movie.movie_id));
+        xhr.open('GET', API_HOST + '/movies/' + encodeURIComponent(movie.movie_id) + '/boxoffice');
         xhr.addEventListener('load', function() {
             var data;
             try {
