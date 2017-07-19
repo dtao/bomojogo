@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var earliestDay = 0;
 
         results.forEach(function(result) {
-            if (results.box_office.length == 0) {
+            if (result.box_office.length == 0) {
                 return;
             }
             earliestDay = Math.max(earliestDay, DAYS.indexOf(result.box_office[0].day));
