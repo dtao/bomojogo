@@ -84,3 +84,8 @@ body.loading:after {
 .bootstrap-tagsinput .tag {
   line-height: 22px;
 }
+
+/* chart legend styling */
+.highcharts-legend-item a {
+  color: black;
+}

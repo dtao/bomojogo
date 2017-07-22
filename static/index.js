@@ -349,6 +349,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     pointStart: 1
                 }
             },
+            legend: {
+                labelFormatter: function() {
+                    return '<a href="' + results[this.index].href +
+                        '" target="_blank">' + this.name + '</a>';
+                },
+                useHTML: true
+            },
             series: results.map(function(result) {
                 var boxOffice = result.box_office;
 
