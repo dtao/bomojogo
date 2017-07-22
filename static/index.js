@@ -96,7 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.body.classList.add('loading');
 
-        var results = [];
+        var results = [],
+            maxResults = getMaxResults(period),
+            dayOffset = 0;
+
         movies.forEach(function(movie) {
             searchMovie(movie, function(result) {
                 // If loading page load, blah blah
@@ -105,8 +108,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 results.push(result);
                 if (results.length == movies.length) {
                     extractErrors(results);
-                    alignResults(results);
-                    chartMovies(results, getMaxResults(period));
+                    dayOffset = alignResults(results);
+                    chartMovies(results, maxResults + dayOffset);
                     history.pushState({
                         'movies': movies,
                         'period': period,
@@ -164,34 +167,36 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function alignResults(results) {
-        var earliestDay = getEarliestDay(results);
+        var dayOffset = getDayOffset(results);
 
         results.forEach(function(result) {
-            padBoxOffice(result, earliestDay);
+            padBoxOffice(result, dayOffset);
         });
+
+        return dayOffset;
     }
 
-    function getEarliestDay(results) {
-        var earliestDay = 0;
+    function getDayOffset(results) {
+        var maxDayOffset = 0;
 
         results.forEach(function(result) {
             if (result.box_office.length == 0) {
                 return;
             }
-            earliestDay = Math.max(earliestDay, DAYS.indexOf(result.box_office[0].day));
+            maxDayOffset = Math.max(maxDayOffset, DAYS.indexOf(result.box_office[0].day));
         });
 
-        return earliestDay;
+        return maxDayOffset;
     }
 
-    function padBoxOffice(result, earliestDay) {
+    function padBoxOffice(result, dayOffset) {
         if (result.box_office.length == 0) {
             return;
         }
 
         var currentDay = DAYS.indexOf(result.box_office[0].day);
 
-        while (currentDay++ < earliestDay) {
+        while (currentDay++ < dayOffset) {
             result.box_office.unshift({
                 day: DAYS[currentDay],
                 date: null,
