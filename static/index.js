@@ -351,8 +351,9 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             legend: {
                 labelFormatter: function() {
-                    return '<a href="' + results[this.index].href +
-                        '" target="_blank">' + this.name + '</a>';
+                    return this.name + ' <a href="' + results[this.index].href +
+                        '" target="_blank"><small><span class="glyphicon ' +
+                        'glyphicon-new-window"></span></small></a>';
                 },
                 useHTML: true
             },

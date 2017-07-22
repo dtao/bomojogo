@@ -87,5 +87,5 @@ body.loading:after {
 
 /* chart legend styling */
 .highcharts-legend-item a {
-  color: black;
+  color: inherit;
 }
