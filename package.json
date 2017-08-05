@@ -1,0 +1,22 @@
+{
+  "name": "boxofficehawk",
+  "version": "1.0.0",
+  "description": "Compare movies based on box office performance",
+  "main": "webpack.config.js",
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "^0.28.4",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.4.1"
+  },
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/dtao/boxofficehawk.git"
+  },
+  "author": "Dan Tao <daniel.tao@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/dtao/boxofficehawk"
+}

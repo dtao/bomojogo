@@ -5,7 +5,7 @@ body.loading:after {
   bottom: 0;
   left: 0;
   right: 0;
-  background: no-repeat center url("/static/loading.gif") #fff;
+  background: no-repeat center url("/static/img/loading.gif") #fff;
   opacity: 0.75;
 }
 
