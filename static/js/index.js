@@ -1,9 +1,10 @@
 import chartMovies from './chart-movies.js';
+import config from './config.js';
+import getBoxOffice from './get-box-office.js';
 
 import '../css/index.css';
 
 document.addEventListener('DOMContentLoaded', function() {
-    const API_HOST = document.body.getAttribute('data-api-host');
     const TITLE_BASE = 'Box Office Hawk';
     const DAYS = [ 'Fri', 'Thu', 'Wed', 'Tue', 'Mon', 'Sun', 'Sat'];
 
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                url: API_HOST + '/movies/search?title=%TITLE',
+                url: config.getApiHost() + '/movies/search?title=%TITLE',
                 wildcard: '%TITLE',
                 transform: function(response) {
                     return response.results;
@@ -105,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dayOffset = 0;
 
         movies.forEach(function(movie) {
-            searchMovie(movie, function(result) {
+            getBoxOffice(movie, function(result) {
                 // If loading page load, blah blah
                 movie.title = result.title;
 
@@ -130,23 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-    }
-
-    function searchMovie(movie, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', API_HOST + '/movies/' + encodeURIComponent(movie.movie_id) + '/boxoffice');
-        xhr.addEventListener('load', function() {
-            var data;
-            try {
-                data = JSON.parse(xhr.responseText);
-            } catch (e) {
-                data = {
-                    'error': 'No luck finding "' + movie.title + '" :('
-                };
-            }
-            callback(data);
-        });
-        xhr.send();
     }
 
     function extractErrors(results) {
