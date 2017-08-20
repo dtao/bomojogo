@@ -1,20 +1,14 @@
 import config from './config.js';
+import makeRequest from './make-request.js';
 
 function getBoxOffice(movie, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', config.getApiHost() + '/movies/' + encodeURIComponent(movie.movie_id) + '/boxoffice');
-    xhr.addEventListener('load', function() {
-        var data;
-        try {
-            data = JSON.parse(xhr.responseText);
-        } catch (e) {
-            data = {
-                'error': 'No luck finding "' + movie.title + '" :('
-            };
+    var path = '/movies/' + encodeURIComponent(movie.movie_id) + '/boxoffice';
+    makeRequest('GET', path, function(data) {
+        if (data.error) {
+            data.error = 'No luck finding "' + movie.title + '" :(';
         }
         callback(data);
     });
-    xhr.send();
 }
 
 export default getBoxOffice;
