@@ -1,70 +1,19 @@
-<html>
+% rebase('layout.html')
 
-<head>
-    <title>Box Office Hawk</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+<form action="/boxoffice" method="GET">
+    <fieldset class="form-group">
+        <label for="title">Movie Title(s)</label>
+        <textarea class="form-control" name="movies" rows="5"></textarea>
+        <span class="help-block">Start typing to search for a movie</span>
 
-    <!-- all this, just for typeahead :( -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" />
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.1.1/typeahead.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+        <label for="period">Time Period</label>
+        <select class="form-control" name="period">
+            <option value="7d">1 week</option>
+            <option value="30d" selected>30 days</option>
+            <option value="90d">90 days</option>
+            <option value="">Forever</option>
+        </select>
+    </fieldset>
 
-    <script src="/static/index.js"></script>
-</head>
-
-<body class="container-fluid" data-api-host="{{API_HOST}}">
-    <main class="row">
-        <section class="col-lg-3 col-md-4">
-            <h1><a href="/">box office hawk</a></h1>
-
-            <p class="lead">compare movies based on box office performance</p>
-
-            <form action="/boxoffice" method="GET">
-                <fieldset class="form-group">
-                    <label for="title">Movie Title(s)</label>
-                    <textarea class="form-control" name="movies" rows="5"></textarea>
-                    <span class="help-block">Start typing to search for a movie</span>
-
-                    <label for="period">Time Period</label>
-                    <select class="form-control" name="period">
-                        <option value="7d">1 week</option>
-                        <option value="30d" selected>30 days</option>
-                        <option value="90d">90 days</option>
-                        <option value="">Forever</option>
-                    </select>
-                </fieldset>
-
-                <button class="btn btn-primary" id="submit-button">Submit</button>
-            </form>
-        </section>
-
-        <section class="col-lg-9 col-md-8">
-            <div id="errors" class="alert alert-danger hidden">
-                <button type="button" class="close"><span>&times;</span></button>
-                <ul><!-- errors go here --></ul>
-            </div>
-
-            <div id="daily-results"></div>
-            <div id="cumulative-results"></div>
-        </section>
-    </main>
-</body>
-
-% if GA_TRACKING_ID:
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', '{{GA_TRACKING_ID}}', 'auto');
-
-// automatically track pageview events on URL changes (from pushState)
-ga('require', 'urlChangeTracker');
-
-ga('send', 'pageview');
-</script>
-<script async src="https://www.google-analytics.com/analytics.js"></script>
-<script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js"></script>
-% end
-
-</html>
+    <button class="btn btn-primary" id="submit-button">Submit</button>
+</form>

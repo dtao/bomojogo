@@ -19,6 +19,7 @@ APP_ROOT = os.path.dirname(__file__)
 @view('index')
 def index():
     return {
+        'VIEW_NAME': 'index',
         'API_HOST': API_HOST,
         'GA_TRACKING_ID': GA_TRACKING_ID
     }
