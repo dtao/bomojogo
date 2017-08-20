@@ -114,4 +114,4 @@ function formatFriday(week) {
     return week + suffix + ' Friday';
 }
 
-module.exports = chartMovies;
+export default chartMovies;
