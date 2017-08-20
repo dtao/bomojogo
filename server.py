@@ -29,4 +29,14 @@ def index():
 def static(filename):
     return static_file(filename, root=os.path.join(APP_ROOT, 'static'))
 
+
+@route('/<slug>')
+@view('matchup')
+def matchup(slug):
+    return {
+        'VIEW_NAME': 'matchup',
+        'API_HOST': API_HOST,
+        'GA_TRACKING_ID': GA_TRACKING_ID
+    }
+
 run(host=HOST, port=PORT, debug=DEBUG)
