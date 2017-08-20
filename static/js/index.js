@@ -1,13 +1,13 @@
 import chartMovies from './chart-movies.js';
 import config from './config.js';
 import getBoxOffice from './get-box-office.js';
+import getMaxResults from './get-max-results.js';
 import loadAllMovies from './load-all-movies.js';
 
 import '../css/index.css';
 
 document.addEventListener('DOMContentLoaded', function() {
     const TITLE_BASE = 'Box Office Hawk';
-    const DAYS = [ 'Fri', 'Thu', 'Wed', 'Tue', 'Mon', 'Sun', 'Sat'];
 
     var moviesField = document.querySelector('textarea[name="movies"]'),
         periodField = document.querySelector('select[name="period"]'),
@@ -102,10 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.body.classList.add('loading');
 
-        loadAllMovies(movies, period, function(results) {
+        loadAllMovies(movies, function(results, dayOffset) {
             extractErrors(results);
-            dayOffset = alignResults(results);
-            renderCharts(results, maxResults + dayOffset);
+            renderCharts(results, getMaxResults(period) + dayOffset);
             history.pushState({
                 'movies': movies,
                 'period': period,
@@ -141,48 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
             errorListItem.textContent = error;
             errorsList.appendChild(errorListItem);
         });
-    }
-
-    function alignResults(results) {
-        var dayOffset = getDayOffset(results);
-
-        results.forEach(function(result) {
-            padBoxOffice(result, dayOffset);
-        });
-
-        return dayOffset;
-    }
-
-    function getDayOffset(results) {
-        var maxDayOffset = 0;
-
-        results.forEach(function(result) {
-            if (result.box_office.length == 0) {
-                return;
-            }
-            maxDayOffset = Math.max(maxDayOffset, DAYS.indexOf(result.box_office[0].day));
-        });
-
-        return maxDayOffset;
-    }
-
-    function padBoxOffice(result, dayOffset) {
-        if (result.box_office.length == 0) {
-            return;
-        }
-
-        var currentDay = DAYS.indexOf(result.box_office[0].day);
-
-        while (currentDay++ < dayOffset) {
-            result.box_office.unshift({
-                day: DAYS[currentDay],
-                date: null,
-                rank: null,
-                gross: null,
-                theaters: null,
-                cumulative: null
-            });
-        }
     }
 
     function renderCharts(results, maxResults) {
@@ -244,28 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         return query;
-    }
-
-    function getMaxResults(period) {
-        if (!period) {
-            return null;
-        }
-
-        try {
-            var parsed = period.match(/^(\d+)([dw])$/),
-                value = Number(parsed[1]),
-                unit = parsed[2];
-        } catch (e) {
-            return null;
-        }
-
-        switch (unit) {
-            case 'w':
-                return value * 7;
-            case 'd':
-            default:
-                return value;
-        }
     }
 
     function getDayAtOrdinal(results, ordinal) {
