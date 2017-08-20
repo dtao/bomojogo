@@ -1,8 +1,8 @@
-import chartMovies from './chart-movies.js';
 import config from './config.js';
 import getBoxOffice from './get-box-office.js';
 import getMaxResults from './get-max-results.js';
 import loadAllMovies from './load-all-movies.js';
+import renderCharts from './render-charts.js';
 
 import '../css/index.css';
 
@@ -140,13 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
             errorListItem.textContent = error;
             errorsList.appendChild(errorListItem);
         });
-    }
-
-    function renderCharts(results, maxResults) {
-        chartMovies('daily-results', results, 'gross', 'Daily box office',
-            maxResults);
-        chartMovies('cumulative-results', results, 'cumulative',
-            'Cumulative box office', maxResults);
     }
 
     function populateForm(movies, period) {
