@@ -1,6 +1,7 @@
 import chartMovies from './chart-movies.js';
 import config from './config.js';
 import getBoxOffice from './get-box-office.js';
+import loadAllMovies from './load-all-movies.js';
 
 import '../css/index.css';
 
@@ -101,35 +102,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.body.classList.add('loading');
 
-        var results = [],
-            maxResults = getMaxResults(period),
-            dayOffset = 0;
+        loadAllMovies(movies, period, function(results) {
+            extractErrors(results);
+            dayOffset = alignResults(results);
+            renderCharts(results, maxResults + dayOffset);
+            history.pushState({
+                'movies': movies,
+                'period': period,
+                'results': results
+            }, '', createQuery(movies, period));
+            updateTitle(movies);
 
-        movies.forEach(function(movie) {
-            getBoxOffice(movie, function(result) {
-                // If loading page load, blah blah
-                movie.title = result.title;
+            // If loading on page load, blah blah
+            if (refresh) {
+                populateForm(movies, period);
+            }
 
-                results.push(result);
-                if (results.length == movies.length) {
-                    extractErrors(results);
-                    dayOffset = alignResults(results);
-                    renderCharts(results, maxResults + dayOffset);
-                    history.pushState({
-                        'movies': movies,
-                        'period': period,
-                        'results': results
-                    }, '', createQuery(movies, period));
-                    updateTitle(movies);
-
-                    // If loading on page load, blah blah
-                    if (refresh) {
-                        populateForm(movies, period);
-                    }
-
-                    document.body.classList.remove('loading');
-                }
-            });
+            document.body.classList.remove('loading');
         });
     }
 
