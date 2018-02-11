@@ -4,8 +4,7 @@ Compare movies based on box office performance.
 
 ## What it is
 
-A simple web app (basically a bunch of vanilla JavaScript stitching together a bunch of not-so-vanilla dependencies) that lets you search for movies and see
-their daily box office results charted together.
+A simple web app (basically a bunch of vanilla JavaScript stitching together a bunch of not-so-vanilla dependencies) that lets you search for movies and see their daily box office results charted together.
 
 ## How it works
 
@@ -13,8 +12,13 @@ Nothing fancy. This app talks to an instance of the [bomojo API][1].
 
 ## Running it yourself
 
-The server side of things is a simple [bottle][2] app which you can run via the
-Procfile using something like [foreman][3] or [honcho][4].
+The server side of things is a simple [bottle][2] app which you can run via the Procfile using something like [foreman][3] or [honcho][4], i.e.:
+
+The front end is built using webpack. To run it:
+
+```
+webpack --watch
+```
 
 The following features are configurable via environment variables:
 
