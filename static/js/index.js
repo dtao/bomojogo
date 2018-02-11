@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', function() {
         closeErrorsButton.addEventListener('click', function() {
             errorsContainer.classList.add('hidden');
         });
+
+        // Load one known good movie to ensure the API is awake.
+        getBoxOffice({ title: 'Wonder Woman', movie_id: 'wonderwoman.htm' }, function(result) {
+            document.querySelector('#search-form fieldset').removeAttribute('disabled');
+        });
     }
 
     function initializeState() {

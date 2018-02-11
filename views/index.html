@@ -1,8 +1,9 @@
 % rebase('layout.html')
 
-<form action="/boxoffice" method="GET">
-    <fieldset class="form-group">
+<form id="search-form" action="/boxoffice" method="GET">
+    <fieldset class="form-group" disabled>
         <label for="title">Movie Title(s)</label>
+        <input id="search-placeholder" class="form-control" type="text" placeholder="Starting up..." />
         <textarea class="form-control" name="movies" rows="5"></textarea>
         <span class="help-block">Start typing to search for a movie</span>
 
