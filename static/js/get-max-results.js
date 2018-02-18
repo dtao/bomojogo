@@ -1,4 +1,4 @@
-function getMaxResults(period) {
+function getMaxResults(period, offset) {
     if (!period) {
         return null;
     }
@@ -13,11 +13,13 @@ function getMaxResults(period) {
 
     switch (unit) {
         case 'w':
-            return value * 7;
+            value *= 7;
         case 'd':
         default:
-            return value;
+            break;
     }
+
+    return value + (offset || 0);
 }
 
 export default getMaxResults;

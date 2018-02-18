@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         loadAllMovies(movies, function(results, dayOffset) {
             extractErrors(results);
-            renderCharts(results, getMaxResults(period) + dayOffset);
+            renderCharts(results, getMaxResults(period, dayOffset));
             history.pushState({
                 'movies': movies,
                 'period': period,

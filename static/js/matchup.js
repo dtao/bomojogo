@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displayMatchup(matchupData, results, dayOffset) {
         titleElement.textContent = matchupData.title;
-        descriptionElement.textContent = matchupData.description;
-        renderCharts(results, getMaxResults(matchupData.period) + dayOffset);
+        descriptionElement.innerHTML = marked(matchupData.description);
+        renderCharts(results, getMaxResults(matchupData.period, dayOffset));
     }
 });
