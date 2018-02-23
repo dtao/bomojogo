@@ -1,20 +1,32 @@
 import config from './config.js';
 
-function makeRequest(method, path, callback) {
+function makeRequest(method, path, data, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, config.getApiHost() + path);
+
+    if (method.toLowerCase() === 'post') {
+        xhr.setRequestHeader('content-type', 'application/json');
+        data = JSON.stringify(data);
+    }
+
+    // The 'data' argument is optional. If it's excluded, the third positional
+    // argument is actually the callback.
+    if (arguments.length == 3) {
+        callback = data;
+    }
+
     xhr.addEventListener('load', function() {
-        var data;
+        var responseData;
         try {
-            data = JSON.parse(xhr.responseText);
+            responseData = JSON.parse(xhr.responseText);
         } catch (e) {
-            data = {
+            responseData = {
                 'error': String(e)
             };
         }
-        callback(data);
+        callback(responseData);
     });
-    xhr.send();
+    xhr.send(data);
 }
 
 export default makeRequest;
