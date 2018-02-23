@@ -30,7 +30,7 @@ def static(filename):
     return static_file(filename, root=os.path.join(APP_ROOT, 'static'))
 
 
-@route('/<slug>')
+@route('/matchup/<slug>')
 @view('matchup')
 def matchup(slug):
     return {

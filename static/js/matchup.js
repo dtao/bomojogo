@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.body.classList.add('loading');
 
-    makeRequest('GET', '/matchups' + location.pathname, function(data) {
+    var slug = location.pathname.split('/').pop();
+    makeRequest('GET', '/matchups/' + slug, function(data) {
         var movies = data.movies.map(function(movieId) {
             return {
                 movie_id: movieId,

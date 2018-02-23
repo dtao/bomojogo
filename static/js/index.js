@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.body.classList.add('loading');
             createMatchup(matchup, function(result) {
-                window.location = '/' + result.slug;
+                window.location = '/matchup/' + result.slug;
             });
         });
 
