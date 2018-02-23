@@ -18,3 +18,15 @@
 
     <button class="btn btn-primary" id="submit-button">Submit</button>
 </form>
+
+<form id="save-form" class="hidden" action="{{API_HOST}}/matchups" method="POST">
+    <fieldset class="form-group">
+        <label for="title">Title</label>
+        <input class="form-control" type="text" name="title" />
+
+        <label for="description">Description</label>
+        <textarea class="form-control" type="text" name="description" ></textarea>
+    </fieldset>
+
+    <input class="btn btn-primary" type="submit" value="Create" />
+</form>

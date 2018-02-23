@@ -1,4 +1,5 @@
 import config from './config.js';
+import createMatchup from './create-matchup.js';
 import getBoxOffice from './get-box-office.js';
 import getMaxResults from './get-max-results.js';
 import loadAllMovies from './load-all-movies.js';
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var moviesField = document.querySelector('textarea[name="movies"]'),
         periodField = document.querySelector('select[name="period"]'),
         submitButton = document.getElementById('submit-button'),
+        saveForm = document.getElementById('save-form'),
         closeErrorsButton = document.querySelector('#errors button.close'),
         errorsContainer = document.getElementById('errors'),
         errorsList = errorsContainer.querySelector('ul'),
@@ -74,6 +76,25 @@ document.addEventListener('DOMContentLoaded', function() {
             errorsContainer.classList.add('hidden');
         });
 
+        saveForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var matchup = {
+                title: saveForm.querySelector('[name="title"]').value,
+                description: saveForm.querySelector('[name="description"]').value,
+                movies: $(moviesField).tagsinput('items').map(
+                    function(movie) {
+                        return movie.movie_id;
+                    }).join(','),
+                period: periodField.value
+            };
+
+            document.body.classList.add('loading');
+            createMatchup(matchup, function(result) {
+                window.location = '/' + result.slug;
+            });
+        });
+
         // Load one known good movie to ensure the API is awake.
         getBoxOffice({ title: 'Wonder Woman', movie_id: 'wonderwoman.htm' }, function(result) {
             document.querySelector('#search-form fieldset').removeAttribute('disabled');
@@ -116,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'results': results
             }, '', createQuery(movies, period));
             updateTitle(movies);
+            saveForm.classList.remove('hidden');
 
             // If loading on page load, blah blah
             if (refresh) {
