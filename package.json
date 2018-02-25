@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "description": "Compare movies based on box office performance",
   "main": "webpack.config.js",
-  "dependencies": {},
-  "devDependencies": {
-    "css-loader": "^0.28.4",
-    "style-loader": "^0.18.2",
+  "dependencies": {
     "webpack": "^3.4.1"
   },
+  "devDependencies": {
+    "css-loader": "^0.28.4",
+    "style-loader": "^0.18.2"
+  },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
