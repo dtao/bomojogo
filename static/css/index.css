@@ -9,15 +9,6 @@ body.loading:after {
   opacity: 0.75;
 }
 
-#search-form fieldset[disabled] textarea,
-#search-form fieldset[disabled] .bootstrap-tagsinput {
-  display: none;
-}
-
-#search-form fieldset:not([disabled]) #search-placeholder {
-  display: none;
-}
-
 #errors {
   position: absolute;
   top: 20px;
