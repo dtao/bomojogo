@@ -9,7 +9,7 @@ body.loading:after {
   opacity: 0.75;
 }
 
-body.loading .back-link {
+body.loading .matchup {
   display: none;
 }
 
@@ -87,6 +87,22 @@ body.loading .back-link {
 }
 .bootstrap-tagsinput .tag {
   line-height: 22px;
+}
+
+/* social sharing fixes */
+.sharethis-inline-share-buttons {
+  margin-bottom: 10px;
+
+  /* prevent reflow when buttons load */
+  height: 32px;
+}
+.sharethis-inline-share-buttons .st-btn {
+  /* for some reason these are a little too wide w/o this */
+  width: 32px;
+}
+.sharethis-inline-share-buttons .st-btn svg {
+  /* ...and these are a little off-center otherwise */
+  left: -2px;
 }
 
 /* chart legend styling */
