@@ -3,6 +3,8 @@ import loadAllMovies from './load-all-movies.js';
 import makeRequest from './make-request.js';
 import renderCharts from './render-charts.js';
 
+import '../css/index.css';
+
 document.addEventListener('DOMContentLoaded', function() {
     var titleElement = document.getElementById('title'),
         descriptionElement = document.getElementById('description');

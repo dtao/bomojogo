@@ -9,6 +9,10 @@ body.loading:after {
   opacity: 0.75;
 }
 
+body.loading .back-link {
+  display: none;
+}
+
 #errors {
   position: absolute;
   top: 20px;
