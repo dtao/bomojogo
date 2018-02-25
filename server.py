@@ -11,6 +11,9 @@ API_HOST = os.getenv('API_HOST', HOST)
 # Google analytics
 GA_TRACKING_ID = os.getenv('GA_TRACKING_ID', None)
 
+# Social sharing
+SHARETHIS_PROPERTY_ID = os.getenv('SHARETHIS_PROPERTY_ID', None)
+
 # not configurable
 APP_ROOT = os.path.dirname(__file__)
 
@@ -21,7 +24,8 @@ def index():
     return {
         'VIEW_NAME': 'index',
         'API_HOST': API_HOST,
-        'GA_TRACKING_ID': GA_TRACKING_ID
+        'GA_TRACKING_ID': GA_TRACKING_ID,
+        'SHARETHIS_PROPERTY_ID': SHARETHIS_PROPERTY_ID
     }
 
 
@@ -36,7 +40,8 @@ def matchup(slug):
     return {
         'VIEW_NAME': 'matchup',
         'API_HOST': API_HOST,
-        'GA_TRACKING_ID': GA_TRACKING_ID
+        'GA_TRACKING_ID': GA_TRACKING_ID,
+        'SHARETHIS_PROPERTY_ID': SHARETHIS_PROPERTY_ID
     }
 
 run(host=HOST, port=PORT, debug=DEBUG)
