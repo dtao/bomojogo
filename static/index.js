@@ -514,6 +514,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Load one known good movie to ensure the API is awake.
         Object(__WEBPACK_IMPORTED_MODULE_2__get_box_office_js__["a" /* default */])({ title: 'Wonder Woman', movie_id: 'wonderwoman.htm' }, function(result) {
+            if (result.error) {
+                displayErrors(["Oh no! The API isn't responding :("]);
+                return;
+            }
+
             document.querySelector('#search-form fieldset').removeAttribute('disabled');
         });
 

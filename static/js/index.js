@@ -103,6 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Load one known good movie to ensure the API is awake.
         getBoxOffice({ title: 'Wonder Woman', movie_id: 'wonderwoman.htm' }, function(result) {
+            if (result.error) {
+                displayErrors(["Oh no! The API isn't responding :("]);
+                return;
+            }
+
             document.querySelector('#search-form fieldset').removeAttribute('disabled');
         });
 
