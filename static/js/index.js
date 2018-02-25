@@ -112,14 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         getMatchups(function(matchups) {
-            matchups.forEach(function(matchup) {
-                var item = document.createElement('a');
-                item.classList.add('list-group-item');
-                item.classList.add('list-group-item-action');
-                item.setAttribute('href', '/matchup/' + matchup.slug);
-                item.textContent = matchup.title;
-                matchupsList.appendChild(item);
-            });
+            showMatchups(matchups);
         });
     }
 
@@ -148,6 +141,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function hideMatchups() {
         matchupsContainer.classList.add('hidden');
+    }
+
+    function showMatchups(matchups) {
+        if (matchups.length > 0) {
+            matchupsContainer.classList.remove('hidden');
+        }
+
+        matchups.forEach(function(matchup) {
+            var item = document.createElement('a');
+            item.classList.add('list-group-item');
+            item.classList.add('list-group-item-action');
+            item.setAttribute('href', '/matchup/' + matchup.slug);
+            item.textContent = matchup.title;
+            matchupsList.appendChild(item);
+        });
     }
 
     function loadMovies(movies, period, refresh) {
