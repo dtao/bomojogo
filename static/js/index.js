@@ -1,6 +1,7 @@
 import config from './config.js';
 import createMatchup from './create-matchup.js';
 import getBoxOffice from './get-box-office.js';
+import getMatchups from './get-matchups.js';
 import getMaxResults from './get-max-results.js';
 import loadAllMovies from './load-all-movies.js';
 import renderCharts from './render-charts.js';
@@ -17,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
         closeErrorsButton = document.querySelector('#errors button.close'),
         errorsContainer = document.getElementById('errors'),
         errorsList = errorsContainer.querySelector('ul'),
+        matchupsContainer = document.getElementById('matchups'),
+        matchupsList = document.getElementById('matchups-list'),
         dailyResultsContainer = document.getElementById('daily-results'),
         cumulativeResultsContainer = document.getElementById('cumulative-results');
 
@@ -72,9 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loadMovies($(moviesField).tagsinput('items'), periodField.value);
         });
 
-        closeErrorsButton.addEventListener('click', function() {
-            errorsContainer.classList.add('hidden');
-        });
+        closeErrorsButton.addEventListener('click', hideErrors);
 
         saveForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -91,6 +92,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.body.classList.add('loading');
             createMatchup(matchup, function(result) {
+                if (result.error) {
+                    displayErrors([result.error]);
+                    return;
+                }
+
                 window.location = '/matchup/' + result.slug;
             });
         });
@@ -99,11 +105,22 @@ document.addEventListener('DOMContentLoaded', function() {
         getBoxOffice({ title: 'Wonder Woman', movie_id: 'wonderwoman.htm' }, function(result) {
             document.querySelector('#search-form fieldset').removeAttribute('disabled');
         });
+
+        getMatchups(function(matchups) {
+            matchups.forEach(function(matchup) {
+                var item = document.createElement('a');
+                item.classList.add('list-group-item');
+                item.classList.add('list-group-item-action');
+                item.setAttribute('href', '/matchup/' + matchup.slug);
+                item.textContent = matchup.title;
+                matchupsList.appendChild(item);
+            });
+        });
     }
 
     function initializeState() {
         if (history.state) {
-            displayState(history.state);
+            displayState(history.state, true);
         }
 
         window.addEventListener('popstate', function(e) {
@@ -111,18 +128,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            displayState(e.state);
+            displayState(e.state, true);
         });
     }
 
-    function displayState(state) {
-        populateForm(state.movies, state.period);
-        renderCharts(state.results, getMaxResults(state.period));
+    function displayState(state, refresh) {
+        if (refresh) {
+            populateForm(state.movies, state.period);
+        }
+        hideMatchups();
+        renderCharts(state.results, getMaxResults(state.period, state.dayOffset || 0));
         updateTitle(state.movies);
     }
 
+    function hideMatchups() {
+        matchupsContainer.classList.add('hidden');
+    }
+
     function loadMovies(movies, period, refresh) {
-        errorsContainer.classList.add('hidden');
+        hideErrors();
         dailyResultsContainer.innerHTML = '';
         cumulativeResultsContainer.innerHTML = '';
 
@@ -130,19 +154,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         loadAllMovies(movies, function(results, dayOffset) {
             extractErrors(results);
-            renderCharts(results, getMaxResults(period, dayOffset));
+            displayState({
+                movies: movies,
+                period: period,
+                dayOffset: dayOffset,
+                results: results
+            }, refresh);
             history.pushState({
                 'movies': movies,
                 'period': period,
                 'results': results
             }, '', createQuery(movies, period));
-            updateTitle(movies);
             saveForm.classList.remove('hidden');
-
-            // If loading on page load, blah blah
-            if (refresh) {
-                populateForm(movies, period);
-            }
 
             document.body.classList.remove('loading');
         });
@@ -158,6 +181,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        displayErrors(errors);
+    }
+
+    function hideErrors() {
+        errorsContainer.classList.add('hidden');
+    }
+
+    function displayErrors(errors) {
         if (errors.length > 0) {
             errorsContainer.classList.remove('hidden');
         }
