@@ -104,11 +104,18 @@ function makeRequest(method, path, data, callback) {
             responseData = JSON.parse(xhr.responseText);
         } catch (e) {
             responseData = {
-                'error': String(e)
+                error: String(e)
             };
         }
         callback(responseData);
     });
+
+    xhr.addEventListener('error', function(e) {
+        callback({
+            error: 'Error from ' + method + ' request to ' + path
+        });
+    });
+
     xhr.send(data);
 }
 
