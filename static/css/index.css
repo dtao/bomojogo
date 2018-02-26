@@ -13,6 +13,17 @@ body.loading .matchup {
   display: none;
 }
 
+.title {
+  font-weight: normal;
+  letter-spacing: -2px;
+  text-transform: lowercase;
+}
+
+.title:hover {
+  font-weight: normal;
+  text-decoration: none;
+}
+
 #errors {
   position: absolute;
   top: 20px;
