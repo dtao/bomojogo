@@ -98,6 +98,22 @@ body.loading .matchup {
 }
 .bootstrap-tagsinput .tag {
   line-height: 22px;
+
+  /* styles copied & pasted directly from Bootstrap's "badge-primary" class */
+  /* without these rules, tags are invisible in Bootstrap 4 */
+  display: inline-block;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  padding-right: .6em;
+  padding-left: .6em;
+  border-radius: 10rem;
+  color: #fff;
+  background-color: #007bff;;
 }
 
 /* social sharing fixes */
