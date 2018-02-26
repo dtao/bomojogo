@@ -1,3 +1,5 @@
+import Highcharts from 'highcharts';
+
 function chartMovies(containerId, results, property, title, maxResults) {
     Highcharts.chart(containerId,
       getChartOptions(title, results, property, maxResults));
