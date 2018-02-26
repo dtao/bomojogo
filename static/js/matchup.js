@@ -1,3 +1,5 @@
+import marked from 'marked';
+
 import getMaxResults from './get-max-results.js';
 import loadAllMovies from './load-all-movies.js';
 import makeRequest from './make-request.js';
