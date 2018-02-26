@@ -5,6 +5,7 @@ import loadAllMovies from './load-all-movies.js';
 import makeRequest from './make-request.js';
 import renderCharts from './render-charts.js';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css';
 
 document.addEventListener('DOMContentLoaded', function() {

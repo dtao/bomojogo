@@ -6,6 +6,7 @@ import getMaxResults from './get-max-results.js';
 import loadAllMovies from './load-all-movies.js';
 import renderCharts from './render-charts.js';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -142,12 +143,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function hideMatchups() {
-        matchupsContainer.classList.add('hidden');
+        matchupsContainer.setAttribute('hidden', '');
     }
 
     function showMatchups(matchups) {
         if (matchups.length > 0) {
-            matchupsContainer.classList.remove('hidden');
+            matchupsContainer.removeAttribute('hidden');
         }
 
         matchups.forEach(function(matchup) {
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'period': period,
                 'results': results
             }, '', createQuery(movies, period));
-            saveForm.classList.remove('hidden');
+            saveForm.removeAttribute('hidden');
 
             document.body.classList.remove('loading');
         });
@@ -200,12 +201,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function hideErrors() {
-        errorsContainer.classList.add('hidden');
+        errorsContainer.setAttribute('hidden', '');
     }
 
     function displayErrors(errors) {
         if (errors.length > 0) {
-            errorsContainer.classList.remove('hidden');
+            errorsContainer.removeAttribute('hidden');
         }
 
         errors.forEach(function(error) {

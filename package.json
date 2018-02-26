@@ -4,6 +4,7 @@
   "description": "Compare movies based on box office performance",
   "main": "webpack.config.js",
   "dependencies": {
+    "bootstrap": "^4.0.0",
     "css-loader": "^0.28.4",
     "highcharts": "^6.0.7",
     "marked": "^0.3.16",

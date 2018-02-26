@@ -1,8 +1,9 @@
 % rebase('layout.html')
 
-<h1><a href="/">box office hawk</a></h1>
-
-<p class="lead">compare movies based on box office performance</p>
+<header class="mt-2">
+    <h1><a class="title" href="/">box office hawk</a></h1>
+    <p class="lead">compare movies based on box office performance</p>
+</header>
 
 <form id="search-form" action="/boxoffice" method="GET">
     <fieldset class="form-group">
@@ -22,7 +23,7 @@
     <button class="btn btn-primary" id="submit-button">Submit</button>
 </form>
 
-<form id="save-form" class="hidden" action="{{API_HOST}}/matchups" method="POST">
+<form id="save-form" action="{{API_HOST}}/matchups" method="POST" hidden>
     <fieldset class="form-group">
         <label for="title">Title</label>
         <input class="form-control" type="text" name="title" />

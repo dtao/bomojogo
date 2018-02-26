@@ -3,7 +3,6 @@
 <head>
     <title>Box Office Hawk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
 
     <!-- all this, just for typeahead :( -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" />
@@ -24,14 +23,14 @@
             {{!base}}
         </section>
 
-        <section class="col-lg-9 col-md-8">
-            <div id="errors" class="alert alert-danger hidden">
+        <section class="container col-lg-9 col-md-8">
+            <div id="errors" class="alert alert-danger" hidden>
                 <button type="button" class="close"><span>&times;</span></button>
                 <ul><!-- errors go here --></ul>
             </div>
 
-            <div id="matchups" class="hidden">
-                <h3>Recent matchups</h3>
+            <div id="matchups" hidden>
+                <h3 class="mt-3">Recent matchups</h3>
                 <div id="matchups-list" class="list-group"></div>
             </div>
             <div id="daily-results"></div>
