@@ -5,8 +5,10 @@
   "main": "webpack.config.js",
   "dependencies": {
     "bootstrap": "^4.0.0",
+    "corejs-typeahead": "^1.2.1",
     "css-loader": "^0.28.4",
     "highcharts": "^6.0.7",
+    "jquery": "^1.12.4",
     "marked": "^0.3.16",
     "style-loader": "^0.18.2",
     "webpack": "^3.4.1"

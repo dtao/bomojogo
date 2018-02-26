@@ -1,3 +1,6 @@
+import $ from 'jquery';
+import Bloodhound from 'corejs-typeahead';
+
 import config from './config.js';
 import createMatchup from './create-matchup.js';
 import getBoxOffice from './get-box-office.js';
@@ -8,6 +11,9 @@ import renderCharts from './render-charts.js';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css';
+
+// Expose jQuery for other libraries (*ahem* tagsinput)
+window.jQuery = $;
 
 document.addEventListener('DOMContentLoaded', function() {
     const TITLE_BASE = 'Box Office Hawk';
