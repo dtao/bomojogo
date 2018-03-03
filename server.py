@@ -14,6 +14,11 @@ GA_TRACKING_ID = os.getenv('GA_TRACKING_ID', None)
 # Social sharing
 SHARETHIS_PROPERTY_ID = os.getenv('SHARETHIS_PROPERTY_ID', None)
 
+# Version of the app -- allow this to be configured via environment variable,
+# i.e. if a particular provider grants this information via a specific variable
+# name, set the APP_VERSION_PROPERTY variable to that name.
+APP_VERSION = os.getenv(os.getenv('APP_VERSION_PROPERTY', 'APP_VERSION'), '1')
+
 # not configurable
 APP_ROOT = os.path.dirname(__file__)
 
@@ -23,6 +28,7 @@ APP_ROOT = os.path.dirname(__file__)
 def index():
     return {
         'VIEW_NAME': 'index',
+        'APP_VERSION': APP_VERSION,
         'API_HOST': API_HOST,
         'GA_TRACKING_ID': GA_TRACKING_ID,
         'SHARETHIS_PROPERTY_ID': SHARETHIS_PROPERTY_ID
@@ -39,6 +45,7 @@ def static(filename):
 def matchup(slug):
     return {
         'VIEW_NAME': 'matchup',
+        'APP_VERSION': APP_VERSION,
         'API_HOST': API_HOST,
         'GA_TRACKING_ID': GA_TRACKING_ID,
         'SHARETHIS_PROPERTY_ID': SHARETHIS_PROPERTY_ID
