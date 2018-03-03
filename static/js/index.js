@@ -144,13 +144,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (refresh) {
             populateForm(state.movies, state.period);
         }
-        hideMatchups();
         renderCharts(state.results, getMaxResults(state.period, state.dayOffset || 0));
         updateTitle(state.movies);
-    }
-
-    function hideMatchups() {
-        matchupsContainer.setAttribute('hidden', '');
+        document.body.classList.add('showing-box-office');
     }
 
     function showMatchups(matchups) {

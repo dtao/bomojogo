@@ -18,6 +18,10 @@ body.loading .matchup {
   visibility: hidden;
 }
 
+body.showing-box-office #matchups {
+  display: none;
+}
+
 .title {
   font-weight: normal;
   letter-spacing: -2px;
