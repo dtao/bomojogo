@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var moviesField = document.querySelector('textarea[name="movies"]'),
         periodField = document.querySelector('select[name="period"]'),
         submitButton = document.getElementById('submit-button'),
-        saveForm = document.getElementById('save-form'),
+        // saveForm = document.getElementById('save-form'),
         closeErrorsButton = document.querySelector('#errors button.close'),
         errorsContainer = document.getElementById('errors'),
         errorsList = errorsContainer.querySelector('ul'),
@@ -84,29 +84,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
         closeErrorsButton.addEventListener('click', hideErrors);
 
-        saveForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // saveForm.addEventListener('submit', function(e) {
+        //     e.preventDefault();
 
-            var matchup = {
-                title: saveForm.querySelector('[name="title"]').value,
-                description: saveForm.querySelector('[name="description"]').value,
-                movies: $(moviesField).tagsinput('items').map(
-                    function(movie) {
-                        return movie.movie_id;
-                    }).join(','),
-                period: periodField.value
-            };
+        //     var matchup = {
+        //         title: saveForm.querySelector('[name="title"]').value,
+        //         description: saveForm.querySelector('[name="description"]').value,
+        //         movies: $(moviesField).tagsinput('items').map(
+        //             function(movie) {
+        //                 return movie.movie_id;
+        //             }).join(','),
+        //         period: periodField.value
+        //     };
 
-            document.body.classList.add('loading');
-            createMatchup(matchup, function(result) {
-                if (result.error) {
-                    displayErrors([result.error]);
-                    return;
-                }
+        //     document.body.classList.add('loading');
+        //     createMatchup(matchup, function(result) {
+        //         if (result.error) {
+        //             displayErrors([result.error]);
+        //             return;
+        //         }
 
-                window.location = '/matchup/' + result.slug;
-            });
-        });
+        //         window.location = '/matchup/' + result.slug;
+        //     });
+        // });
 
         // Load one known good movie to ensure the API is awake.
         document.body.classList.add('loading');
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'period': period,
                 'results': results
             }, '', createQuery(movies, period));
-            saveForm.removeAttribute('hidden');
+            // saveForm.removeAttribute('hidden');
 
             document.body.classList.remove('loading');
         });
