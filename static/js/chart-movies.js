@@ -6,6 +6,14 @@ function chartMovies(containerId, results, property, title, maxResults) {
 }
 
 function getChartOptions(title, results, property, maxResults) {
+    var getProperty = property;
+
+    if (typeof property === 'string') {
+        getProperty = function(daily, index, boxOffice) {
+            return daily[property];
+        };
+    }
+
     return {
         chart: {
             zoomType: 'x'
@@ -80,8 +88,8 @@ function getChartOptions(title, results, property, maxResults) {
             return {
                 type: 'line',
                 name: result.title,
-                data: boxOffice.map(function(daily) {
-                    return [daily.day, daily[property]];
+                data: boxOffice.map(function(daily, index) {
+                    return [daily.day, getProperty(daily, index, boxOffice)];
                 })
             };
         }),
