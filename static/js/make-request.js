@@ -19,9 +19,12 @@ function makeRequest(method, path, data, callback) {
         var responseData;
         try {
             responseData = JSON.parse(xhr.responseText);
+            if (responseData.errors) {
+                responseData.errors = flattenErrors(responseData.errors);
+            }
         } catch (e) {
             responseData = {
-                error: String(e)
+                errors: [String(e)]
             };
         }
         callback(responseData);
@@ -29,11 +32,23 @@ function makeRequest(method, path, data, callback) {
 
     xhr.addEventListener('error', function(e) {
         callback({
-            error: 'Error from ' + method + ' request to ' + path
+            errors: ['Error from ' + method + ' request to ' + path]
         });
     });
 
     xhr.send(data);
+}
+
+function flattenErrors(errors) {
+    var flattened = [];
+
+    Object.keys(errors).forEach(function(key) {
+        flattened.push.apply(flattened, errors[key].map(function(error) {
+            return key + ': ' + error;
+        }));
+    });
+
+    return flattened;
 }
 
 export default makeRequest;

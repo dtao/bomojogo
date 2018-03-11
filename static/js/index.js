@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         getBoxOffice({ title: 'Wonder Woman', movie_id: 'wonderwoman.htm' }, function(result) {
             document.body.classList.remove('loading');
 
-            if (result.error) {
+            if (result.errors) {
                 displayErrors(["Oh no! The API isn't responding :("]);
                 return;
             }
@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var errors = [];
 
         for (var i = results.length - 1; i >= 0; --i) {
-            if (results[i].error) {
-                errors.push(results[i].error);
+            if (results[i].errors) {
+                errors.push.apply(errors, (results[i].errors));
                 results.splice(i, 1);
             }
         }
