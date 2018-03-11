@@ -1,4 +1,5 @@
 import os
+import random
 
 from bottle import route, run, static_file, view
 
@@ -17,7 +18,11 @@ SHARETHIS_PROPERTY_ID = os.getenv('SHARETHIS_PROPERTY_ID', None)
 # Version of the app -- allow this to be configured via environment variable,
 # i.e. if a particular provider grants this information via a specific variable
 # name, set the APP_VERSION_PROPERTY variable to that name.
-APP_VERSION = os.getenv(os.getenv('APP_VERSION_PROPERTY', 'APP_VERSION'), '1')
+APP_VERSION = os.getenv(os.getenv('APP_VERSION_PROPERTY', 'APP_VERSION'),
+                        # In debug contexts use a random 6-digit integer by
+                        # default to effectively prevent browsers from caching
+                        # assets.
+                        str(random.randint(100000, 999999)) if DEBUG else '1')
 
 # not configurable
 APP_ROOT = os.path.dirname(__file__)
