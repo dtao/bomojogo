@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             var matchup = {
                 title: saveForm.querySelector('[name="title"]').value,
+                email: saveForm.querySelector('[name="email"]').value,
                 description: saveForm.querySelector('[name="description"]').value,
                 movies: $(moviesField).tagsinput('items').map(
                     function(movie) {
