@@ -16,6 +16,17 @@ function renderCharts(results, maxResults) {
 
     chartMovies('daily-change-results', results, dailyChange,
         'Daily % change', maxResults);
+
+    function weeklyChange(daily, index, boxOffice) {
+        if (index < 7) {
+            return null;
+        }
+
+        return Math.round(daily.gross / boxOffice[index - 7].gross * 100);
+    }
+
+    chartMovies('weekly-change-results', results, weeklyChange,
+        'Weekly % change', maxResults);
 }
 
 export default renderCharts;
