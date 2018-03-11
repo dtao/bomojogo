@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
             errorsContainer.removeAttribute('hidden');
         }
 
+        errorsList.innerHTML = '';
         errors.forEach(function(error) {
             var errorListItem = document.createElement('li');
             errorListItem.textContent = error;
