@@ -9,7 +9,7 @@ function getChartOptions(title, results, property, maxResults) {
     var getProperty = property;
 
     if (typeof property === 'string') {
-        getProperty = function(daily, index, boxOffice) {
+        getProperty = function(daily) {
             return daily[property];
         };
     }
