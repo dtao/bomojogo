@@ -30,6 +30,22 @@ body.showing-box-office #matchups {
   display: none;
 }
 
+#matchup-details {
+  line-height: 32px;
+  margin-bottom: 10px;
+}
+
+#matchup-details img.avatar {
+  float: left;
+  height: 32px;
+  width: 32px;
+  margin-right: 8px;
+}
+
+#matchup-details:before {
+  content: "created ";
+}
+
 .title {
   font-weight: normal;
   letter-spacing: -2px;

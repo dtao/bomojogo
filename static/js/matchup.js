@@ -10,12 +10,23 @@ import '../css/index.css';
 
 document.addEventListener('DOMContentLoaded', function() {
     var titleElement = document.getElementById('title'),
+        detailsElement = document.getElementById('matchup-details'),
+        createdElement = detailsElement.querySelector('small'),
         descriptionElement = document.getElementById('description');
 
-    document.body.classList.add('loading');
+    document.body.classList.add('loading-matchup');
 
     var slug = location.pathname.split('/').pop();
     makeRequest('GET', '/matchups/' + slug, function(data) {
+        createdElement.textContent = new Date(data.created).toLocaleString();
+
+        if (data.avatar) {
+            var img = document.createElement('img');
+            img.classList.add('avatar');
+            img.setAttribute('src', data.avatar);
+            detailsElement.appendChild(img);
+        }
+
         var movies = data.movies.map(function(movieId) {
             return {
                 movie_id: movieId,
@@ -25,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         loadAllMovies(movies, function(results, dayOffset) {
             displayMatchup(data, results, dayOffset);
-            document.body.classList.remove('loading');
+            document.body.classList.remove('loading-matchup');
         });
     });
 
