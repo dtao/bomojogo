@@ -10,9 +10,14 @@
 
     <script src="/static/{{VIEW_NAME}}.js?v={{APP_VERSION}}"></script>
 
-    <!-- have had some trouble importing typeahead via npm -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+    % for asset in get('EXTRA_ASSETS', []):
+        % if asset.endswith('.css'):
+            <link rel="stylesheet" href="{{asset}}" />
+        % elif asset.endswith('.js'):
+            <script src="{{asset}}"></script>
+        % end
+    % end
+
 </head>
 
 <body class="container-fluid" data-api-host="{{API_HOST}}">

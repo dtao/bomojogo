@@ -31,7 +31,12 @@ def index():
         'APP_VERSION': APP_VERSION,
         'API_HOST': API_HOST,
         'GA_TRACKING_ID': GA_TRACKING_ID,
-        'SHARETHIS_PROPERTY_ID': SHARETHIS_PROPERTY_ID
+        'SHARETHIS_PROPERTY_ID': SHARETHIS_PROPERTY_ID,
+        'EXTRA_ASSETS': [
+            # have had some trouble importing typeahead via npm
+            'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js'
+        ]
     }
 
 
