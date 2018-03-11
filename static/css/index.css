@@ -10,12 +10,20 @@
   z-index: 2;
 }
 
-body.loading #loading-overlay {
+body[class*="loading"] #loading-overlay {
   display: block;
 }
 
-body.loading .matchup {
+body[class*="loading"] .matchup {
   visibility: hidden;
+}
+
+#save-form {
+  display: none;
+}
+
+body.showing-box-office #save-form {
+  display: block;
 }
 
 body.showing-box-office #matchups {
