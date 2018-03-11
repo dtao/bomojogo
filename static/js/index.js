@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (movieTitles.length > 0) {
-            title += ' - ' + movieTitles.join(' / ');
+            title = movieTitles.join(' / ') + ' - ' + title;
         }
 
         document.title = title;

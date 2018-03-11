@@ -1,3 +1,4 @@
+import gravatarUrl from 'gravatar-url';
 import marked from 'marked';
 
 import getMaxResults from './get-max-results.js';
@@ -9,6 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.css';
 
 document.addEventListener('DOMContentLoaded', function() {
+    const TITLE_BASE = 'Box Office Hawk';
+
     var titleElement = document.getElementById('title'),
         detailsElement = document.getElementById('matchup-details'),
         createdElement = detailsElement.querySelector('small'),
@@ -41,8 +44,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function displayMatchup(matchupData, results, dayOffset) {
+        document.title = matchupData.title + ' - ' + TITLE_BASE;
         titleElement.textContent = matchupData.title;
         descriptionElement.innerHTML = marked(matchupData.description);
         renderCharts(results, getMaxResults(matchupData.period, dayOffset));
+
+        // Update social sharing buttons if present.
+        var sharingButtons = document.querySelector(
+            '.sharethis-inline-share-buttons');
+        if (sharingButtons) {
+            sharingButtons.setAttribute('data-title', matchupData.title);
+        }
     }
 });
