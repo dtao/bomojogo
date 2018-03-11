@@ -26,7 +26,7 @@ function renderCharts(results, maxResults) {
     }
 
     chartMovies('weekly-change-results', results, weeklyChange,
-        'Weekly % change', maxResults);
+        'Weekly % change', maxResults, { xAxis: { min: 8 } });
 }
 
 export default renderCharts;

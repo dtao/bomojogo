@@ -1,8 +1,15 @@
 import Highcharts from 'highcharts';
 
-function chartMovies(containerId, results, property, title, maxResults) {
-    Highcharts.chart(containerId,
-      getChartOptions(title, results, property, maxResults));
+import merge from './merge';
+
+function chartMovies(containerId, results, property, title, maxResults, extraOptions) {
+    var options = getChartOptions(title, results, property, maxResults);
+
+    if (extraOptions) {
+        options = merge(options, extraOptions);
+    }
+
+    Highcharts.chart(containerId, options);
 }
 
 function getChartOptions(title, results, property, maxResults) {
